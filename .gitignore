@@ -35,3 +35,29 @@ compile_commands.json
 #==============================================================================#
 # Sphinx build tree, if building in-source dir.
 docs/_build
+
+# Ignore builds
+Release
+*.inc
+*.export
+*.dir
+*.cfg
+*.log
+*.status
+*.dir
+Makefile.config
+Makefile.llvmbuild
+bindings/ocaml/llvm/META.llvm
+include/llvm/Config/AsmParsers.def
+include/llvm/Config/AsmPrinters.def
+include/llvm/Config/Disassemblers.def
+include/llvm/Config/Targets.def
+include/llvm/Config/config.h
+include/llvm/Config/llvm-config.h
+include/llvm/IR/Intrinsics.gen
+include/llvm/Support/DataTypes.h
+llvm.spec
+projects/sample/Makefile.common
+projects/sample/Makefile.llvm.config
+tools/clang/include/clang/Config/config.h
+unittests/ExecutionEngine/JIT/JITTests.exports
