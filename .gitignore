@@ -48,6 +48,7 @@ Release
 Makefile.config
 Makefile.llvmbuild
 bindings/ocaml/llvm/META.llvm
+bindings/ocaml/backends/Makefile.X86
 include/llvm/Config/AsmParsers.def
 include/llvm/Config/AsmPrinters.def
 include/llvm/Config/Disassemblers.def
