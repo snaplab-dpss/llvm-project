@@ -28,7 +28,7 @@ static value llvm_target_error_exn;
 
 CAMLprim value llvm_register_target_exns(value Error) {
   llvm_target_error_exn = Field(Error, 0);
-  register_global_root(&llvm_target_error_exn);
+  caml_register_global_root(&llvm_target_error_exn);
   return Val_unit;
 }
 
@@ -36,10 +36,10 @@ static void llvm_raise(value Prototype, char *Message) {
   CAMLparam1(Prototype);
   CAMLlocal1(CamlMessage);
 
-  CamlMessage = copy_string(Message);
+  CamlMessage = caml_copy_string(Message);
   LLVMDisposeMessage(Message);
 
-  raise_with_arg(Prototype, CamlMessage);
+  caml_raise_with_arg(Prototype, CamlMessage);
   abort(); /* NOTREACHED */
 #ifdef CAMLnoreturn
   CAMLnoreturn; /* Silences warnings, but is missing in some versions. */
@@ -74,8 +74,8 @@ static struct custom_operations llvm_data_layout_ops = {
 };
 
 value llvm_alloc_data_layout(LLVMTargetDataRef DataLayout) {
-  value V = alloc_custom(&llvm_data_layout_ops, sizeof(LLVMTargetDataRef),
-                         0, 1);
+  value V = caml_alloc_custom(&llvm_data_layout_ops, sizeof(LLVMTargetDataRef),
+                              0, 1);
   DataLayout_val(V) = DataLayout;
   return V;
 }
@@ -88,7 +88,7 @@ CAMLprim value llvm_datalayout_of_string(value StringRep) {
 /* DataLayout.t -> string */
 CAMLprim value llvm_datalayout_as_string(value TD) {
   char *StringRep = LLVMCopyStringRepOfTargetData(DataLayout_val(TD));
-  value Copy = copy_string(StringRep);
+  value Copy = caml_copy_string(StringRep);
   LLVMDisposeMessage(StringRep);
   return Copy;
 }
@@ -270,8 +270,8 @@ static struct custom_operations llvm_target_machine_ops = {
 };
 
 static value llvm_alloc_targetmachine(LLVMTargetMachineRef Machine) {
-  value V = alloc_custom(&llvm_target_machine_ops, sizeof(LLVMTargetMachineRef),
-                         0, 1);
+  value V = caml_alloc_custom(&llvm_target_machine_ops, sizeof(LLVMTargetMachineRef),
+                              0, 1);
   TargetMachine_val(V) = Machine;
   return V;
 }

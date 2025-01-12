@@ -24,7 +24,7 @@ static value llvm_bitreader_error_exn;
 
 CAMLprim value llvm_register_bitreader_exns(value Error) {
   llvm_bitreader_error_exn = Field(Error, 0);
-  register_global_root(&llvm_bitreader_error_exn);
+  caml_register_global_root(&llvm_bitreader_error_exn);
   return Val_unit;
 }
 
@@ -32,10 +32,10 @@ static void llvm_raise(value Prototype, char *Message) {
   CAMLparam1(Prototype);
   CAMLlocal1(CamlMessage);
   
-  CamlMessage = copy_string(Message);
+  CamlMessage = caml_copy_string(Message);
   LLVMDisposeMessage(Message);
   
-  raise_with_arg(Prototype, CamlMessage);
+  caml_raise_with_arg(Prototype, CamlMessage);
   abort(); /* NOTREACHED */
 #ifdef CAMLnoreturn
   CAMLnoreturn; /* Silences warnings, but is missing in some versions. */

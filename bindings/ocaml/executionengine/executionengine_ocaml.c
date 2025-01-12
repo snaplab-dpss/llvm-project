@@ -41,7 +41,7 @@ static value llvm_ee_error_exn;
 
 CAMLprim value llvm_register_ee_exns(value Error) {
   llvm_ee_error_exn = Field(Error, 0);
-  register_global_root(&llvm_ee_error_exn);
+  caml_register_global_root(&llvm_ee_error_exn);
   return Val_unit;
 }
 
@@ -49,10 +49,10 @@ static void llvm_raise(value Prototype, char *Message) {
   CAMLparam1(Prototype);
   CAMLlocal1(CamlMessage);
   
-  CamlMessage = copy_string(Message);
+  CamlMessage = caml_copy_string(Message);
   LLVMDisposeMessage(Message);
   
-  raise_with_arg(Prototype, CamlMessage);
+  caml_raise_with_arg(Prototype, CamlMessage);
   abort(); /* NOTREACHED */
 #ifdef CAMLnoreturn
   CAMLnoreturn; /* Silences warnings, but is missing in some versions. */
@@ -81,7 +81,7 @@ static struct custom_operations generic_value_ops = {
 };
 
 static value alloc_generic_value(LLVMGenericValueRef Ref) {
-  value Val = alloc_custom(&generic_value_ops, sizeof(LLVMGenericValueRef), 0, 1);
+  value Val = caml_alloc_custom(&generic_value_ops, sizeof(LLVMGenericValueRef), 0, 1);
   Genericvalue_val(Val) = Ref;
   return Val;
 }
@@ -128,7 +128,7 @@ CAMLprim value llvm_genericvalue_of_int64(LLVMTypeRef Ty, value Int64) {
 /* Llvm.lltype -> t -> float */
 CAMLprim value llvm_genericvalue_as_float(LLVMTypeRef Ty, value GenVal) {
   CAMLparam1(GenVal);
-  CAMLreturn(copy_double(
+  CAMLreturn(caml_copy_double(
     LLVMGenericValueToFloat(Ty, Genericvalue_val(GenVal))));
 }
 
@@ -149,7 +149,7 @@ CAMLprim value llvm_genericvalue_as_int32(value GenVal) {
   CAMLparam1(GenVal);
   assert(LLVMGenericValueIntWidth(Genericvalue_val(GenVal)) <= 32
          && "Generic value too wide to treat as an int32!");
-  CAMLreturn(copy_int32(LLVMGenericValueToInt(Genericvalue_val(GenVal), 1)));
+  CAMLreturn(caml_copy_int32(LLVMGenericValueToInt(Genericvalue_val(GenVal), 1)));
 }
 
 /* t -> int64 */
@@ -157,7 +157,7 @@ CAMLprim value llvm_genericvalue_as_int64(value GenVal) {
   CAMLparam1(GenVal);
   assert(LLVMGenericValueIntWidth(Genericvalue_val(GenVal)) <= 64
          && "Generic value too wide to treat as an int64!");
-  CAMLreturn(copy_int64(LLVMGenericValueToInt(Genericvalue_val(GenVal), 1)));
+  CAMLreturn(caml_copy_int64(LLVMGenericValueToInt(Genericvalue_val(GenVal), 1)));
 }
 
 /* t -> nativeint */
@@ -165,7 +165,7 @@ CAMLprim value llvm_genericvalue_as_nativeint(value GenVal) {
   CAMLparam1(GenVal);
   assert(LLVMGenericValueIntWidth(Genericvalue_val(GenVal)) <= 8 * sizeof(value)
          && "Generic value too wide to treat as a nativeint!");
-  CAMLreturn(copy_nativeint(LLVMGenericValueToInt(Genericvalue_val(GenVal),1)));
+  CAMLreturn(caml_copy_nativeint(LLVMGenericValueToInt(Genericvalue_val(GenVal),1)));
 }
 
 
@@ -229,7 +229,7 @@ CAMLprim value llvm_ee_find_function(value Name, LLVMExecutionEngineRef EE) {
   LLVMValueRef Found;
   if (LLVMFindFunction(EE, String_val(Name), &Found))
     CAMLreturn(Val_unit);
-  Option = alloc(1, 0);
+  Option = caml_alloc_tuple(1);
   Field(Option, 0) = Val_op(Found);
   CAMLreturn(Option);
 }

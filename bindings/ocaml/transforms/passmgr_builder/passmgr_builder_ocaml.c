@@ -39,7 +39,7 @@ static struct custom_operations pmbuilder_ops = {
 };
 
 static value alloc_pmbuilder(LLVMPassManagerBuilderRef Ref) {
-  value Val = alloc_custom(&pmbuilder_ops,
+  value Val = caml_alloc_custom(&pmbuilder_ops,
                            sizeof(LLVMPassManagerBuilderRef), 0, 1);
   PMBuilder_val(Val) = Ref;
   return Val;

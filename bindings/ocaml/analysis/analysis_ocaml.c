@@ -32,8 +32,8 @@ CAMLprim value llvm_verify_module(LLVMModuleRef M) {
   if (0 == Result) {
     Option = Val_int(0);
   } else {
-    Option = alloc(1, 0);
-    String = copy_string(Message);
+    Option = caml_alloc_tuple(1);
+    String = caml_copy_string(Message);
     Store_field(Option, 0, String);
   }
   
