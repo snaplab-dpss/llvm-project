@@ -94,6 +94,7 @@ namespace sys {
     /// Caller provides the exact value as a double in seconds with the
     /// fractional part representing nanoseconds.
     /// @brief Double Constructor.
+    /*
     explicit TimeValue( double new_time )
       : seconds_( 0 ) , nanos_ ( 0 ) {
       SecondsType integer_part = static_cast<SecondsType>( new_time );
@@ -102,6 +103,7 @@ namespace sys {
                static_cast<double>(integer_part)) * NANOSECONDS_PER_SECOND );
       this->normalize();
     }
+    */
 
     /// This is a static constructor that returns a TimeValue that represents
     /// the current time.
